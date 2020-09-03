@@ -30,6 +30,7 @@ function isAuthenticated(req, res, next) {
         // retrieve the authorization header and parse out the
         // JWT using the split function
         let token = req.headers.authorization.split(" ")[1];
+        console.log(`${token}`)
         let privateKey = fs.readFileSync('./private.pem', 'utf8');
         // Here we validate that the JSON Web Token is valid and has been 
         // created using the same private pass phrase
