@@ -5,18 +5,21 @@ const hello = (event, context, callback) => {
     const response = {
         statusCode: 200,
         body: JSON.stringify({
-            message: "hello"
+            message: "helloo"
         })
     };
     callback(undefined, response);
 };
 exports.hello = hello;
 const bye = (event, context, callback) => {
+    const n = Math.random() * 100 % 5 + 1;
+    const s = n.toString();
+    console.log(s);
     const response = {
         statusCode: 404,
         whatever: JSON.stringify({ message: "byebye" }),
         body: JSON.stringify({
-            message: "bye"
+            message: s
         })
     };
     callback(undefined, response);

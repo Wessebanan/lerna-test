@@ -12,7 +12,7 @@ app.get('/secret', isAuthenticated, (req, res) => {
 })
 
 app.get('/readme', (req, res) => {
-    res.json({"message" : "readme.medicinaedoctor"})
+    res.json({"message" : "readme"})
 })
 
 app.get('/jwt', (req, res) => {
@@ -25,13 +25,15 @@ app.listen(port,
     () => console.log(`Simple Express app listening on port ${port}!`))
 
 function isAuthenticated(req, res, next) {
-    console.log(`${req.headers.authorization}`)
+   
     if (typeof req.headers.authorization !== "undefined") {
         // retrieve the authorization header and parse out the
         // JWT using the split function
         let token = req.headers.authorization.split(" ")[1];
-        console.log(`${token}`)
+        console.log(req.headers)
+        console.log(token)
         let privateKey = fs.readFileSync('./private.pem', 'utf8');
+        console.log(privateKey)
         // Here we validate that the JSON Web Token is valid and has been 
         // created using the same private pass phrase
         jwt.verify(token, privateKey, { algorithm: "HS256" }, (err, user) => {
