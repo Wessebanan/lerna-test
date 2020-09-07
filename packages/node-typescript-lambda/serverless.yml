@@ -24,11 +24,12 @@ plugins:
   - serverless-plugin-typescript
   - serverless-offline
 
+
 package:
   exclude:
     - node_modules/**/*
   include:
-    handler.ts
+    #handler.ts
 
 provider:
   name: aws
@@ -81,6 +82,27 @@ functions:
       - http:
           path: bye
           method: get
+  echo:
+    handler: handler.echo
+    events:
+      - http:
+          path: echo
+          method: get
+      - http:
+          path: echo/p
+          method: post
+  retrieve:
+    handler: handler.retrieve
+    events:
+      - http:
+          path: retrieve
+          method: get
+  store:
+    handler: handler.store
+    events:      
+      - http:
+          path: store
+          method: post
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

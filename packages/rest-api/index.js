@@ -1,19 +1,63 @@
 const express = require('express')
 const jwt = require('jsonwebtoken');
-const fs = require('fs')
+const fs = require('fs');
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+//const bodyParser = require('body-parser');
+const querystring = require('querystring');
+
 
 const app = express()
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+app.use(express.raw());
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+})
+
 const port = 8080
+
+const http = new XMLHttpRequest();
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
 app.get('/secret', isAuthenticated, (req, res) => {
-    res.json({ "message" : "playful secrets"})
+    res.json({ "message" : "secret."})
 })
 
 app.get('/readme', (req, res) => {
-    res.json({"message" : "readme"})
+    res.json({"message" : "readme."})
 })
+
+app.get('/hello', (req, res) => {
+    http.open('GET', 'http://localhost:3000/dev/hello', false);
+    http.send();
+    res.send(http.responseText);
+    
+})
+
+app.get('/retrieve', (req, res) => {
+    let id = 0;
+    if (req.query.id !== undefined) {
+        id = req.query.id;
+    }
+    http.open('GET', 'http://localhost:3000/dev/retrieve?id='+id.toString(), false);
+    http.send();
+    res.send(http.responseText);
+})
+
+app.post('/store', (req, res) => {
+    console.log(req.body);
+    console.log(JSON.stringify(req.body));
+    http.open('POST', 'http://localhost:3000/dev/store', false);
+    http.send(JSON.stringify(req.body));    
+    res.send(http.responseText);
+})
+
 
 app.get('/jwt', (req, res) => {
     let privateKey = fs.readFileSync('./private.pem', 'utf8');
@@ -22,7 +66,7 @@ app.get('/jwt', (req, res) => {
 })
 
 app.listen(port, 
-    () => console.log(`Simple Express app listening on port ${port}!`))
+    () => console.log(`Ready on port ${port}!`))
 
 function isAuthenticated(req, res, next) {
    
